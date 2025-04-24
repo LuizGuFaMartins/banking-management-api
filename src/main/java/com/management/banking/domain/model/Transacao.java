@@ -22,7 +22,6 @@ import lombok.Data;
 @Table(name = "transacoes")
 @Data
 public class Transacao {
-
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
     @Column(name = "id", columnDefinition = "uuid", updatable = false, nullable = false)
