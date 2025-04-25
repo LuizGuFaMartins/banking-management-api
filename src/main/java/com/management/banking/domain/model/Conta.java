@@ -12,11 +12,17 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 @Entity
 @Table(name = "contas")
 @Data
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
 public class Conta {
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
@@ -30,6 +36,6 @@ public class Conta {
     private BigDecimal saldo;
 
     @CreationTimestamp
-    @Column(name = "created_at", nullable = false, updatable = false)
+    @Column(name = "data_criacao", nullable = false, updatable = false)
     private LocalDateTime dataCriacao;
 }
