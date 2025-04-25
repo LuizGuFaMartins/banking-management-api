@@ -1,8 +1,6 @@
 package com.management.banking.presentation.dto.input;
 
 import java.math.BigDecimal;
-import java.time.LocalDateTime;
-import java.util.UUID;
 
 import com.management.banking.domain.enums.FormaPagamentoEnum;
 import com.management.banking.domain.model.Transacao;
@@ -25,16 +23,10 @@ public class TransacaoInputDTO {
     @DecimalMin(value = "0.01", inclusive = true, message = "O valor da transação deve ser maior que zero")
     private BigDecimal valor;
 
-    public FormaPagamentoEnum getFormaPagamentoEnum() {
-        return FormaPagamentoEnum.valueOf(this.formaPagamento);
-    }
-
-    public Transacao toEntity(UUID contaId) {
+    public Transacao toEntity() {
         return Transacao.builder()
-                .contaId(contaId)
-                .formaPagamento(this.getFormaPagamentoEnum())
+                .formaPagamento(FormaPagamentoEnum.fromCodigo(this.formaPagamento))
                 .valor(this.valor)
-                .data(LocalDateTime.now())
                 .build();
     }
 }

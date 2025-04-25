@@ -9,16 +9,21 @@ import com.management.banking.domain.enums.FormaPagamentoEnum;
 import com.management.banking.domain.model.Conta;
 import com.management.banking.domain.model.Transacao;
 import com.management.banking.domain.repository.TransacaoRepository;
+import com.management.banking.domain.strategy.FormaPagamentoResolver;
+import com.management.banking.domain.strategy.FormaPagamentoStrategy;
 import com.management.banking.presentation.dto.input.TransacaoInputDTO;
 
 import jakarta.transaction.Transactional;
 
 @Service
 public class TransacaoService {
+    private final FormaPagamentoResolver formaPagamentoResolver;
     private final TransacaoRepository transacaoRepository;
     private final ContaService contaService;
 
-    public TransacaoService(TransacaoRepository transacaoRepository, ContaService contaService) {
+    public TransacaoService(FormaPagamentoResolver formaPagamentoResolver, TransacaoRepository transacaoRepository,
+            ContaService contaService) {
+        this.formaPagamentoResolver = formaPagamentoResolver;
         this.transacaoRepository = transacaoRepository;
         this.contaService = contaService;
     }
@@ -27,7 +32,9 @@ public class TransacaoService {
     public Transacao realizarTransacao(TransacaoInputDTO dto) {
         Conta conta = contaService.buscarPorNumero(dto.getNumeroConta());
 
-        BigDecimal valorComTaxa = calcularValorComTaxa(dto.getValor(), dto.getFormaPagamentoEnum());
+        FormaPagamentoStrategy strategy = formaPagamentoResolver
+                .resolver(FormaPagamentoEnum.fromCodigo(dto.getFormaPagamento()));
+        BigDecimal valorComTaxa = strategy.taxarValor(dto.getValor());
 
         if (conta.getSaldo().compareTo(valorComTaxa) < 0) {
             throw new SaldoInsuficienteException("Saldo insuficiente para a transação.");
@@ -36,19 +43,11 @@ public class TransacaoService {
         conta.setSaldo(conta.getSaldo().subtract(valorComTaxa));
         contaService.atualizarConta(conta);
 
-        Transacao transacao = dto.toEntity(conta.getId());
+        Transacao transacao = dto.toEntity();
+        transacao.setContaId(conta.getId());
+        transacao.setValor(valorComTaxa);
+
         return transacaoRepository.save(transacao);
     }
 
-    private BigDecimal calcularValorComTaxa(BigDecimal valor, FormaPagamentoEnum forma) {
-        switch (forma) {
-            case D:
-                return valor.multiply(BigDecimal.valueOf(1.03));
-            case C:
-                return valor.multiply(BigDecimal.valueOf(1.05));
-            case P:
-            default:
-                return valor;
-        }
-    }
 }
