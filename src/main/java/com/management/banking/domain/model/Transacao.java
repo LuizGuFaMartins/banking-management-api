@@ -21,6 +21,7 @@ import lombok.Data;
 @Entity
 @Table(name = "transacoes")
 @Data
+@NoArgsConstructor
 public class Transacao {
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
@@ -38,6 +39,6 @@ public class Transacao {
     private FormaPagamentoEnum formaPagamento;
 
     @CreationTimestamp
-    @Column(name = "created_at", nullable = false, updatable = false)
+    @Column(name = "data_criacao", nullable = false, updatable = false)
     private LocalDateTime dataCriacao;
 }
