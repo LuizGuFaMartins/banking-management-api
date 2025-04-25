@@ -11,10 +11,12 @@ import com.management.banking.domain.model.Transacao;
 import com.management.banking.presentation.dto.input.TransacaoInputDTO;
 import com.management.banking.presentation.dto.output.TransacaoOutputDTO;
 
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 
 @RestController
-@RequestMapping("/transacao")
+@RequestMapping("/api/transacao")
+@Tag(name = "Trasações", description = "Endpoints reponsáveis por genreciar transações")
 public class TransacaoController {
 
     private final TransacaoService transacaoService;

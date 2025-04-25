@@ -13,10 +13,12 @@ import com.management.banking.domain.model.Conta;
 import com.management.banking.presentation.dto.input.ContaInputDTO;
 import com.management.banking.presentation.dto.output.ContaOutputDTO;
 
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 
 @RestController
-@RequestMapping("/conta")
+@RequestMapping("/api/conta")
+@Tag(name = "Contas", description = "Endpoints reponsáveis por genreciar contas")
 public class ContaController {
 
     private final ContaService contaService;
