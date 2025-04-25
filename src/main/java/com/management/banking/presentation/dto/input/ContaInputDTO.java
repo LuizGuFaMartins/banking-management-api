@@ -6,9 +6,15 @@ import com.management.banking.domain.model.Conta;
 
 import jakarta.validation.constraints.DecimalMin;
 import jakarta.validation.constraints.NotNull;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 @Data
+@Builder
+@AllArgsConstructor
+@NoArgsConstructor
 public class ContaInputDTO {
     @NotNull(message = "O número da conta é obrigatório")
     private Integer numeroConta;

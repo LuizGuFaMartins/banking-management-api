@@ -6,11 +6,15 @@ import java.util.UUID;
 
 import com.management.banking.domain.model.Transacao;
 
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 @Data
 @Builder
+@AllArgsConstructor
+@NoArgsConstructor
 public class TransacaoOutputDTO {
     private UUID id;
     private UUID contaId;
